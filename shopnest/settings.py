@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-9!xlw=l9cze5xot!(j2bf=06$-a1694mshoskdqv7#0li^v@st
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://shopnest-eykw.onrender.com']
+ALLOWED_HOSTS = ['shopnest-eykw.onrender.com']
 
 
 # Application definition
