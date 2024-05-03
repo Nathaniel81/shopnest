@@ -1,18 +1,26 @@
 import { ProductProps } from "../../types";
 import { HiShoppingCart } from "react-icons/hi";
-import { FaHeart } from "react-icons/fa";
 import FormattedPrice from "../FormattedPrice";
-import { useDispatch } from "react-redux";
-import { addToCart, addToFavorite } from "../../redux/slices/cartSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
 import { Link } from "react-router-dom";
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { StateProps, StoreProduct } from "../../types";
 
 
-//eslint-disable-next-line
-const Products = ({ productData }: any) => {
+interface ProductsProps {
+  productData: StoreProduct[];
+}
+
+const Products = ({ productData }: ProductsProps) => {
   const dispatch = useDispatch();
+  const { favoriteData } = useSelector(
+    (state: StateProps) => state.app
+  );
   return (
+    // Grid layout for the products
     <div className="w-full px-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-      {productData.map(
+      {productData?.map(
         ({
           id,
           title,
@@ -21,7 +29,7 @@ const Products = ({ productData }: any) => {
           category,
           description,
           main_image,
-          isNew,
+          is_new,
           old_price,
           price,
         }: ProductProps) => (
@@ -41,6 +49,7 @@ const Products = ({ productData }: any) => {
                   alt="productImage"
                 />
               </Link>
+              {/* Icons for adding to cart and adding to favorites */}
               <div className="w-12 h-24 absolute bottom-10 right-0 border-[1px] border-gray-400 bg-white rounded-md flex flex-col translate-x-20 group-hover:translate-x-0 transition-transform duration-300">
               <span
                 onClick={() =>
@@ -51,7 +60,7 @@ const Products = ({ productData }: any) => {
                       category: category,
                       description: description,
                       main_image: main_image,
-                      isNew: isNew,
+                      is_new: is_new,
                       old_price: old_price,
                       price: price,
                       title: title,
@@ -72,21 +81,21 @@ const Products = ({ productData }: any) => {
                           category: category,
                           description: description,
                           main_image: main_image,
-                          isNew: isNew,
+                          is_new: is_new,
                           old_price: old_price,
                           price: price,
                           title: title,
-                          quantity: 1,
                         })
                       )
                     }
                   }
                   className="w-full h-full border-b-[1px] border-b-gray-400 flex items-center justify-center text-xl bg-transparent hover:bg-amazon_yellow cursor-pointer duration-300"
                 >
-                  <FaHeart />
+                  {favoriteData.find((item: StoreProduct) => item.id === id) ? <FaHeart /> : <FaRegHeart />}
                 </span>
               </div>
-              {isNew && (
+              {/* Display a save tag if the product is new */}
+              {is_new && (
                 <p className="absolute top-0 right-0 text-amazon_blue font-medium text-xs tracking-wide animate-bounce">
                   !save <FormattedPrice amount={old_price - price} />
                 </p>
@@ -116,7 +125,7 @@ const Products = ({ productData }: any) => {
                       category: category,
                       description: description,
                       main_image: main_image,
-                      isNew: isNew,
+                      is_new: is_new,
                       old_price: old_price,
                       price: price,
                       title: title,

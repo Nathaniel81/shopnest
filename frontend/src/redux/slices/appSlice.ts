@@ -12,13 +12,13 @@ const initialState: AppState = {
   favoriteData: []
 };
 
-export const cartSlice = createSlice({
-  name: "cart",
+export const appSlice = createSlice({
+  name: "app",
   initialState,
   reducers: {
     addToCart: (state, action) => {
       const existingProduct = state.productData.find(
-        (item: StoreProduct) => item._id === action.payload._id
+        (item: StoreProduct) => item.id === action.payload.id
       );
       if (existingProduct) {
         existingProduct.quantity += action.payload.quantity;
@@ -27,16 +27,15 @@ export const cartSlice = createSlice({
       }
     },
     addToFavorite: (state, action) => {
-      const existingProduct = state.favoriteData.find(
-        (item: StoreProduct) => item._id === action.payload._id
+      const existingProductIndex = state.favoriteData.findIndex(
+        (item: StoreProduct) => item.id === action.payload.id
       );
-      if (existingProduct) {
-        existingProduct.quantity += action.payload.quantity;
+      if (existingProductIndex !== -1) {
+        state.favoriteData.splice(existingProductIndex, 1);
       } else {
         state.favoriteData.push(action.payload);
       }
     },
-
     resetCart: (state) => {
       state.productData = [];
     },
@@ -46,5 +45,5 @@ export const cartSlice = createSlice({
 export const {
   addToCart,
   addToFavorite
-} = cartSlice.actions;
-export default cartSlice.reducer;
+} = appSlice.actions;
+export default appSlice.reducer;

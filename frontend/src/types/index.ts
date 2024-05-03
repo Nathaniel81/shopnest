@@ -8,7 +8,7 @@ export interface ProductProps {
     description: string;
     image: string;
     main_image: string;
-    isNew: boolean;
+    is_new: boolean;
     old_price: number;
     price: number;
     title: string;
@@ -21,7 +21,7 @@ export interface StoreProduct {
     description: string;
     image: string;
     main_image: string;
-    isNew: boolean;
+    is_new: boolean;
     old_price: number;
     price: number;
     title: string;
@@ -35,5 +35,5 @@ export interface StateProps {
     favoriteData: [];
     userInfo: null | string;
     //eslint-disable-next-line
-    next: any;
+    app: any;
   }

@@ -12,7 +12,7 @@ const Footer = () => {
           href="https://reactbd.com"
           target="_blank"
         >
-          @reactbd.com
+          @shopnest.com
         </a>
       </p>
     </div>

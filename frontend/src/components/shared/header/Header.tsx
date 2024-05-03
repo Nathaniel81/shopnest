@@ -2,7 +2,7 @@ import { BiCaretDown } from "react-icons/bi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlLocationPin } from "react-icons/sl";
 import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { StateProps, StoreProduct } from "../../../types";
 import { useEffect, useState } from "react";
 // import SearchProducts from "../SearchProducts";
@@ -13,9 +13,10 @@ const Header = () => {
   const cartIcon = headerIcons[0].imgURL;
   const [allData, setAllData] = useState([]);
   const userInfo = false;
-  const productData = [];
-  const favoriteData = [];
-  const allProducts = [];
+
+  const { productData, favoriteData } = useSelector(
+    (state: StateProps) => state.app
+  );
 
   // Search area
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,7 +58,7 @@ const Header = () => {
             value={searchQuery}
             className="w-full h-full rounded-md px-2 placeholder:text-sm text-base text-black border-[3px] border-transparent outline-none focus-visible:border-amazon_yellow"
             type="text"
-            placeholder="Search next_amazon_yt products"
+            placeholder="Search products"
           />
           <span className="w-12 h-full bg-amazon_yellow text-black text-2xl flex items-center justify-center absolute right-0 rounded-tr-md rounded-br-md">
             <HiOutlineSearch />
@@ -71,7 +72,7 @@ const Header = () => {
                     filteredProducts.map((item: StoreProduct) => (
                       <Link
                         to={"/"}
-                        key={item._id}
+                        key={item.id}
                         className="w-full border-b-[1px] border-b-gray-400 flex items-center gap-4"
                         // to={{
                         //   pathname: `${item._id}`,
