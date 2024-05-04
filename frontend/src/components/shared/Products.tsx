@@ -17,6 +17,7 @@ const Products = ({ productData }: ProductsProps) => {
   const { favoriteData } = useSelector(
     (state: StateProps) => state.app
   );
+
   return (
     // Grid layout for the products
     <div className="w-full px-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
