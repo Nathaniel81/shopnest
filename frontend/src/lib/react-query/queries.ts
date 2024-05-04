@@ -20,3 +20,14 @@ const getProducts = async () => {
       queryFn: () => getProducts(),
     });
   };
+
+const getProductDetail = async (id?: string) => {
+    const response = await axios.get(`/api/products/${id}/`);
+    return response.data;
+  };
+  export const useGetProductDetail = (id?: string) => {
+    return useQuery({
+      queryKey: [QUERY_KEYS.GET_PRODUCT_DETAIL, id],
+      queryFn: () => getProductDetail(id),
+    });
+  };
