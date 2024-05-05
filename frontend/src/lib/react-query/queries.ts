@@ -31,3 +31,15 @@ const getProductDetail = async (id?: string) => {
       queryFn: () => getProductDetail(id),
     });
   };
+
+
+const getSearchedProducts = async (searchTerm: string) => {
+  const response = await axios.get(`/api/products/search?query=${searchTerm}`);
+  return response.data;
+};
+export const useGetSearchedProducts = (searchTerm: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SEARCHED_PRODUCTS, searchTerm],
+    queryFn: () => getSearchedProducts(searchTerm),
+  });
+};
