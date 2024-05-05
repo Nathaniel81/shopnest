@@ -1,16 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { StoreProduct } from "../../types";
-
+import { StoreProduct, IUser  } from "../../types";
+import { createSlice  } from '@reduxjs/toolkit'
 
 interface AppState {
   productData: StoreProduct[];
   favoriteData: StoreProduct[];
+  userInfo: IUser;
 }
 
 const initialState: AppState = {
   productData: [],
-  favoriteData: []
+  favoriteData: [],
+  userInfo: {}
 };
+
+// export const login = createAsyncThunk(
+//   'user/login',
+//   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+//     try {
+//       const config = {
+//         headers: {
+//           'Content-type': 'application/json'
+//         }
+//       }
+//       const { data } = await axios.post(`/api/user/login/`, { email, password }, config)
+//       return data
+//     } catch (error) {
+// 		const err = error as AxiosError
+// 		return rejectWithValue(err.response?.data)
+//     }
+//   }
+// )
 
 export const appSlice = createSlice({
   name: "app",
@@ -60,6 +79,9 @@ export const appSlice = createSlice({
     resetCart: (state) => {
       state.productData = [];
     },
+    addUser: (state, action) => {
+      state.userInfo = action.payload;
+    },
   },
 });
 
@@ -69,6 +91,7 @@ export const {
   increaseQuantity,
   decreaseQuantity,
   deleteProduct,
-  resetCart
+  resetCart,
+  addUser
 } = appSlice.actions;
 export default appSlice.reducer;

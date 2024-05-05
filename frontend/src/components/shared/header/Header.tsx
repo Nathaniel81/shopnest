@@ -1,11 +1,10 @@
 import { BiCaretDown } from "react-icons/bi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { SlLocationPin } from "react-icons/sl";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { StateProps, StoreProduct } from "../../../types";
 import { useEffect, useState } from "react";
-// import SearchProducts from "../SearchProducts";
 import SearchProducts from "../SearchProduct";
 import { headerIcons } from "../../../constants";
 import { useGetSearchedProducts } from "../../../lib/react-query/queries";
@@ -14,34 +13,26 @@ import { BeatLoader } from "react-spinners";
 
 
 const Header = () => {
-  // const { data } = useGetSearchedProducts();
   const cartIcon = headerIcons[0].imgURL;
-  const [allData, setAllData] = useState([]);
   const userInfo = false;
+  const navigate = useNavigate();
 
   const { productData, favoriteData } = useSelector(
     (state: StateProps) => state.app
   );
 
-  // Search area
-  // const [filteredProducts, setFilteredProducts] = useState([]);
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const filtered = allData.filter((item: StoreProduct) =>
-  //     item.title.toLocaleLowerCase().includes(searchQuery.toLowerCase())
-  //   );
-  //   setFilteredProducts(filtered);
-  // }, [searchQuery]);
-
-  // const [searchValue, setSearchValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const debouncedSearch = useDebounce(searchQuery, 500);
-  const { data: searchedProducts, isFetching: isSearchFetching } = useGetSearchedProducts(debouncedSearch);
+  const { 
+    data: searchedProducts, 
+    isFetching: isSearchFetching 
+  } = useGetSearchedProducts(debouncedSearch);
+
 
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
@@ -119,8 +110,8 @@ const Header = () => {
             </div>
           </div>
         ) : (
-          <div
-            // onClick={() => signIn()}
+          <Link
+            to={'/sign-in'}
             className="text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%]"
           >
             <p>Hello, sign in</p>
@@ -130,7 +121,7 @@ const Header = () => {
                 <BiCaretDown />
               </span>
             </p>
-          </div>
+          </Link>
         )}
         {/* fovorite */}
         <Link

@@ -41,5 +41,6 @@ export const useGetSearchedProducts = (searchTerm: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_SEARCHED_PRODUCTS, searchTerm],
     queryFn: () => getSearchedProducts(searchTerm),
+    enabled: !!searchTerm,
   });
 };
