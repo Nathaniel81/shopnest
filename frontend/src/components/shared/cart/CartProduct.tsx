@@ -31,9 +31,15 @@ const CartProduct = ({ item }: cartProductsProps) => {
           <p className="text-lg font-semibold text-amazon_blue">{item.title}</p>
           <p className="text-sm text-gray-600">{item.description}</p>
           <p className="text-sm text-gray-600">
-            Unit Price{" "}
+            Unit Price:{" "}
             <span className="font-semibold text-amazon_blue">
               <FormattedPrice amount={item.price} />
+            </span>
+          </p>
+          <p className="text-sm md:hidden text-gray-600">
+            Total Price:{" "}
+            <span className="font-semibold text-amazon_blue">
+              <FormattedPrice amount={item.price * item.quantity} />
             </span>
           </p>
           <div className="flex items-center gap-6">
@@ -46,7 +52,7 @@ const CartProduct = ({ item }: cartProductsProps) => {
                       brand: item.brand,
                       category: item.category.name,
                       description: item.description,
-                      image: item.image,
+                      image: item.main_image,
                       is_new: item.is_new,
                       old_price: item.old_price,
                       price: item.price,
@@ -68,7 +74,7 @@ const CartProduct = ({ item }: cartProductsProps) => {
                       brand: item.brand,
                       category: item.category.name,
                       description: item.description,
-                      image: item.image,
+                      image: item.main_image,
                       is_new: item.is_new,
                       old_price: item.old_price,
                       price: item.price,
@@ -90,7 +96,7 @@ const CartProduct = ({ item }: cartProductsProps) => {
             </div>
           </div>
         </div>
-        <div className="text-lg font-semibold text-amazon_blue">
+        <div className="hidden md:block text-lg font-semibold text-amazon_blue">
           <FormattedPrice amount={item.price * item.quantity} />
         </div>
       </div>

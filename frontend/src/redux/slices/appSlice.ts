@@ -36,6 +36,27 @@ export const appSlice = createSlice({
         state.favoriteData.push(action.payload);
       }
     },
+    increaseQuantity: (state, action) => {
+      const existingProduct = state.productData.find(
+        (item: StoreProduct) => item.id === action.payload.id
+      );
+      existingProduct && existingProduct.quantity++;
+    },
+    decreaseQuantity: (state, action) => {
+      const existingProduct = state.productData.find(
+        (item: StoreProduct) => item.id === action.payload.id
+      );
+      if (existingProduct?.quantity === 1) {
+        existingProduct.quantity = 1;
+      } else {
+        existingProduct!.quantity--;
+      }
+    },
+    deleteProduct: (state, action) => {
+      state.productData = state.productData.filter(
+        (item) => item.id !== action.payload
+      );
+    },
     resetCart: (state) => {
       state.productData = [];
     },
@@ -44,6 +65,10 @@ export const appSlice = createSlice({
 
 export const {
   addToCart,
-  addToFavorite
+  addToFavorite,
+  increaseQuantity,
+  decreaseQuantity,
+  deleteProduct,
+  resetCart
 } = appSlice.actions;
 export default appSlice.reducer;

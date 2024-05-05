@@ -6,7 +6,7 @@ import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { StateProps, StoreProduct } from "../../types";
-
+import { toast } from "react-toastify";
 
 interface ProductsProps {
   productData: StoreProduct[];
@@ -133,6 +133,7 @@ const Products = ({ productData }: ProductsProps) => {
                       quantity: 1,
                     })
                   )
+                  toast.success("Item added to cart!");
                 }}
                 className="h-10 font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300 mt-2"
               >

@@ -11,15 +11,15 @@ const CartPage = () => {
   const { productData } = useSelector((state: StateProps) => state.app);
 
   return (
-    <div className="h-screen max-w-screen-2xl mx-auto px-6 grid grid-cols-5 gap-10 py-4">
+    <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 md:grid-cols-5 gap-10 py-4">
       {productData.length > 0 ? (
         <>
-          <div className="bg-white col-span-4 p-4 rounded-lg">
+          <div className="bg-white md:col-span-4 p-4 rounded-lg">
             <div className="flex items-center justify-between border-b-[1px] border-b-gray-400 pb-1">
               <p className="text-2xl font-semibold text-amazon_blue">
                 Shopping Cart
               </p>
-              <p className="text-lg font-semibold text-amazon_blue">Subtitle</p>
+              <p className="text-lg font-semibold text-amazon_blue"></p>
             </div>
             <div className="pt-2 flex flex-col gap-2">
               {productData.map((item: StoreProduct) => (
@@ -30,7 +30,7 @@ const CartPage = () => {
               <ResetCart />
             </div>
           </div>
-          <div className="bg-white h-64 col-span-1 p-4 rounded-lg flex items-center justify-center">
+          <div className="bg-white md:h-64 p-4 rounded-lg flex items-center justify-center">
             <CartPayment />
           </div>
         </>
@@ -39,7 +39,7 @@ const CartPage = () => {
           <h1 className="text-lg font-medium">Your cart is empty!</h1>
           <Link to={"/"}>
             <button className="w-52 h-10 bg-amazon_blue text-white rounded-lg text-sm font-semibold hover:bg-amazon_yellow hover:text-black">
-              go to shopping
+              Go home
             </button>
           </Link>
         </div>

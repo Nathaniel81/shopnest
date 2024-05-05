@@ -6,9 +6,9 @@ import { sliderImages } from "../../constants";
 export default function Banner() {
   return ( 
     <>
-      <div className='relative'>
+      <div className='relative h-screen'>
         <Carousel 
-          showArrows={true} 
+          showArrows={false} 
           autoPlay={true} 
           interval={3000}
           infiniteLoop={true} 

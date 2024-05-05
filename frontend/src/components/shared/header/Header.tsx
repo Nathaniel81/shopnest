@@ -6,10 +6,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { StateProps, StoreProduct } from "../../../types";
 import { useEffect, useState } from "react";
 // import SearchProducts from "../SearchProducts";
+import SearchProducts from "../SearchProduct";
 import { headerIcons } from "../../../constants";
+import { useGetSearchedProducts } from "../../../lib/react-query/queries";
+import useDebounce from "../../../hooks/useDebounce";
+import { BeatLoader } from "react-spinners";
 
 
 const Header = () => {
+  // const { data } = useGetSearchedProducts();
   const cartIcon = headerIcons[0].imgURL;
   const [allData, setAllData] = useState([]);
   const userInfo = false;
@@ -19,19 +24,24 @@ const Header = () => {
   );
 
   // Search area
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  // const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  useEffect(() => {
-    const filtered = allData.filter((item: StoreProduct) =>
-      item.title.toLocaleLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery]);
+  // useEffect(() => {
+  //   const filtered = allData.filter((item: StoreProduct) =>
+  //     item.title.toLocaleLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [searchQuery]);
+
+  // const [searchValue, setSearchValue] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const debouncedSearch = useDebounce(searchQuery, 500);
+  const { data: searchedProducts, isFetching: isSearchFetching } = useGetSearchedProducts(debouncedSearch);
 
   return (
     <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
@@ -66,38 +76,28 @@ const Header = () => {
           {/* ========== Searchfield ========== */}
           {searchQuery && (
             <div className="absolute left-0 top-12 w-full mx-auto max-h-96 bg-gray-200 rounded-lg overflow-y-scroll cursor-pointer text-black">
-              {filteredProducts.length > 0 ? (
+              {searchedProducts?.length > 0 ? (
                 <>
                   {searchQuery &&
-                    filteredProducts.map((item: StoreProduct) => (
+                    searchedProducts.map((item: StoreProduct) => (
                       <Link
-                        to={"/"}
+                        to={`/${item.id}`}
                         key={item.id}
                         className="w-full border-b-[1px] border-b-gray-400 flex items-center gap-4"
-                        // to={{
-                        //   pathname: `${item._id}`,
-                        //   query: {
-                        //     _id: item._id,
-                        //     brand: item.brand,
-                        //     category: item.category,
-                        //     description: item.description,
-                        //     image: item.image,
-                        //     isNew: item.isNew,
-                        //     oldPrice: item.oldPrice,
-                        //     price: item.price,
-                        //     title: item.title,
-                        //   },
-                        // }}
                         onClick={() => setSearchQuery("")}
                       >
-                        {/* <SearchProducts item={item} /> */}
+                        <SearchProducts item={item} />
                       </Link>
                     ))}
                 </>
               ) : (
                 <div className="bg-gray-50 flex items-center justify-center py-10 rounded-lg shadow-lg">
                   <p className="text-xl font-semibold">
-                    Nothing is matches with your search keywords.
+                    {isSearchFetching ? 
+                      <div className="w-full flex flex-col gap-6 items-center justify-center">
+                        <BeatLoader color="#131921" size={10} />
+                      </div> :
+                    <>Nothing is matches with your search keywords.</>}
                   </p>
                 </div>
               )}

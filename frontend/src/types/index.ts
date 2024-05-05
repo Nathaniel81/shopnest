@@ -1,3 +1,4 @@
+
 export interface Category {
   id: string;
   name: string
@@ -29,7 +30,7 @@ export interface StoreProduct {
     id: number;
     quantity: number;
   }
-  
+
 export interface StateProps {
     productData: [];
     favoriteData: [];

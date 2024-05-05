@@ -1,9 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
-import { Home } from './_root/pages';
+import { Home, ProductDetail, Cart } from './_root/pages';
 import RootLayout from "./_root/pages/RootLayout";
 import './globals.css';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
@@ -11,9 +13,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <ToastContainer hideProgressBar position='bottom-right'/>
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
+            <Route path="/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
           </Route>
         </Routes>
       </Router>
@@ -21,4 +26,5 @@ function App() {
   )
 }
 
-export default App
+export default App;
+

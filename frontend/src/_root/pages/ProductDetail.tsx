@@ -9,17 +9,37 @@ import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { BeatLoader } from "react-spinners";
 import { useGetProductDetail } from "../../lib/react-query/queries";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 
 const ProductDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     data: product, 
     isLoading,
     // isError
   } = useGetProductDetail(id);
+  console.log(product)
+
+  const addToCartHandler = () => {
+    dispatch(
+      addToCart({
+        id: product.id,
+        brand: product.brand,
+        category: product.category.name,
+        description: product.description,
+        main_image: product.main_image,
+        is_new: product.is_new,
+        old_price: product.old_price,
+        price: product.price,
+        title: product.title,
+        quantity: 1,
+      })
+    )
+    navigate(`/cart/`);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,22 +63,8 @@ const ProductDetail = () => {
             />
             <div className="w-12 h-24 absolute bottom-10 right-0 border-[1px] border-gray-400 bg-white rounded-md flex flex-col translate-x-20 group-hover:-translate-x-2 transition-transform duration-300">
               <span
-                onClick={() =>
-                  dispatch(
-                    addToCart({
-                      id: product.id,
-                      brand: product.brand,
-                      category: product.category.name,
-                      description: product.description,
-                      image: product.image,
-                      is_new: product.is_new,
-                      old_price: product.old_price,
-                      price: product.price,
-                      title: product.title,
-                      quantity: 1,
-                    })
-                  )
-                }
+                onClick={() => addToCartHandler()}
+
                 className="w-full h-full border-b-[1px] border-b-gray-400 flex items-center justify-center text-xl bg-transparent hover:bg-amazon_yellow cursor-pointer duration-300"
               >
                 <HiShoppingCart />
@@ -111,22 +117,7 @@ const ProductDetail = () => {
                 </span>
               </p>
               <button
-                onClick={() =>
-                  dispatch(
-                    addToCart({
-                      id: product.id,
-                      brand: product.brand,
-                      category: product.category.name,
-                      description: product.description,
-                      image: product.image,
-                      is_new: product.is_new,
-                      old_price: product.old_price,
-                      price: product.price,
-                      title: product.title,
-                      quantity: 1,
-                    })
-                  )
-                }
+                onClick={() => addToCartHandler()}
                 className="w-full md:w-96 h-12 bg-amazon_blue text-gray-200 hover:bg-amazon_yellow hover:text-amazon_blue duration-300 rounded-lg mt-5 text-base font-semibold"
               >
                 add to cart
