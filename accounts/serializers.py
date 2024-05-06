@@ -56,12 +56,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     confirmPassword = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
-    tokens = serializers.SerializerMethodField(read_only=True)
-    token = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'email', 'password', 'confirmPassword', 'tokens', 'token']
+        fields = ['id', 'username', 'email', 'address', 'password', 'confirmPassword']
         read_only_fields = ['id']
 
     def validate(self, data):
@@ -100,7 +98,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         validated_data.pop('confirmPassword')
         user = User.objects.create(
-            name=validated_data['name'],
             username=validated_data['username'],
             email=validated_data['email']
         )
