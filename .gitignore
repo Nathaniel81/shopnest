@@ -62,6 +62,9 @@ staticfiles/
 # Ignore configuration files
 *.conf
 
+/node_modules
+/package-lock.json
+
 # Ignore Docker files
 # Dockerfile
 # docker-compose.yml
