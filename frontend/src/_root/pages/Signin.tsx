@@ -42,14 +42,21 @@ const Signin = () => {
       //eslint-disable-next-line
     } catch (error: any) {
       console.log(error)
-      if (error.response && error.response.status === 401) {
-        toast.error('Incorrect email or password. Please try again.');
+      if (error.response) {
+        if (error.response.status === 401) {
+          toast.error('Incorrect email or password. Please try again.');
+        } else if (error.response.status === 429) {
+          toast.error('Too many login attempts. Please try again later.');
+        } else {
+          toast.error('An error occurred. Please try again later.');
+        }
       } else {
         toast.error('An error occurred. Please try again later.');
       }
     }
     setLoading(false);
   });
+  
 
 
   return (
@@ -131,7 +138,7 @@ const Signin = () => {
               <span className="w-1/3 text-center">New to Amazon?</span>
               <span className="w-1/3 h-[1px] bg-zinc-400 inline-flex"></span>
             </p>
-            <Link className="w-full" to="/registration">
+            <Link className="w-full" to="/sign-up">
               <button className="w-full py-1.5 mt-4 text-sm font-normal rounded-sm bg-gradient-to-t from-slate-200 to-slate-100 hover:bg-gradient-to-b border border-zinc-400 active:border-yellow-800 active:shadow-amazonInput">
                 Create your Amazon account
               </button>

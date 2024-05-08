@@ -1,9 +1,6 @@
 import FormattedPrice from "../../components/FormattedPrice";
 import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
-import { 
-  useEffect, 
-  // useState 
-} from "react";
+import {   useEffect } from "react";
 import { FaHeart } from "react-icons/fa";
 import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch } from "react-redux";
@@ -19,7 +16,6 @@ const ProductDetail = () => {
   const {
     data: product, 
     isLoading,
-    // isError
   } = useGetProductDetail(id);
   console.log(product)
 
@@ -49,14 +45,13 @@ const ProductDetail = () => {
     <div className="h-screen max-w-screen-xl mx-auto px-4 py-4 md:py-10">
       {isLoading ? (
         <div className="w-full flex flex-col gap-6 items-center justify-center py-20">
-          {/* <p>Your product is loading...</p> */}
           <BeatLoader color="#131921" size={40} />
         </div>
       ) : (
         <div className="w-full grid md:grid-cols-3 gap-3 bg-gray-100 rounded-lg">
           <div className="flex items-center justify-center bg-gray-200 rounded-lg relative group overflow-hidden">
             <img
-              src={product.main_image}
+              src={product?.main_image}
               alt="product image"
               width={500}
               height={500}
