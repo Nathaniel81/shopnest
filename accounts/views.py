@@ -8,11 +8,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt import tokens
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.throttling import AnonRateThrottle
 
 from .models import User
 from .serializers import (MyTokenObtainPairSerializer, RegistrationSerializer,
                           UserSerializer)
 
+
+class LoginRateThrottle(AnonRateThrottle):
+    rate = '5/hour'
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """
@@ -20,6 +24,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
     """
 
     serializer_class = MyTokenObtainPairSerializer
+    throttle_classes = [LoginRateThrottle]
 
     def post(self, request, *args, **kwargs):
         """
@@ -92,10 +97,8 @@ class RegistrationView(generics.CreateAPIView):
 
         # Construct the response with serialized user data
         response = Response({
-            'response': 'Successfully registered',
             'id': serializedData['id'],
             'username': serializedData['username'],
-            'name': serializedData['name'],
             'email': serializedData['email'],
         })
         access_token =  serializedData.get('access_token')

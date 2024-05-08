@@ -3,6 +3,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 from cloudinary.utils import cloudinary_url
+from core.serializers import ProductSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,9 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
     This serializer is used to serialize User objects.
     """
 
+    saved_products = ProductSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'address']
+        fields = ['id', 'username', 'email', 'address', 'saved_products']
 
     def get__id(self, obj):
         """Get the id field value."""
