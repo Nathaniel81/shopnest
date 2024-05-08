@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
-import dj_database_url
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
+
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,12 +30,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9!xlw=l9cze5xot!(j2bf=06$-a1694mshoskdqv7#0li^v@st'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shopnest-eykw.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,14 +48,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'core',
     'corsheaders',
+    'cloudinary',
+    'accounts',
+    'core',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,7 +73,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # os.path.join(BASE_DIR, 'staticfiles/'),
             os.path.join(BASE_DIR, 'frontend/dist/')
         ],
         'APP_DIRS': True,
@@ -82,6 +88,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'shopnest.wsgi.application'
+AUTH_USER_MODEL = 'accounts.User'
+
+
+# Cloudinary - Django Integration
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET_KEY'),
+)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET_KEY'),
+}
 
 SIMPLE_JWT = {
   'ACCESS_TOKEN_LIFETIME': timedelta(seconds=3000),
@@ -178,15 +199,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'frontend', 'dist')
-# ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend', 'dist')
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

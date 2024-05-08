@@ -6,18 +6,31 @@ import {
  } from "@tanstack/react-query";
 import axios from 'axios';
 import { QUERY_KEYS } from "./queryKeys";
+import { SearchParams } from "../../types";
 
 
 // Product Queries
 
-const getProducts = async () => {
-    const response = await axios.get('/api/products/');
+const getProducts = async (filter?: string) => {
+    const response = await axios.get(`/api/products/${filter}`);
     return response.data;
   };
-  export const useGetProducts = () => {
+  export const useGetProducts = (filter?: string) => {
     return useQuery({
       queryKey: [QUERY_KEYS.GET_PRODUCTS],
-      queryFn: () => getProducts(),
+      queryFn: () => getProducts(filter),
+      enabled: !!filter
+    });
+  };
+
+const getCategories = async () => {
+    const response = await axios.get('/api/products/categories/');
+    return response.data;
+  };
+  export const useGetCategories = () => {
+    return useQuery({
+      queryKey: [QUERY_KEYS.GET_CATEGORIES],
+      queryFn: () => getCategories(),
     });
   };
 
@@ -33,14 +46,16 @@ const getProductDetail = async (id?: string) => {
   };
 
 
-const getSearchedProducts = async (searchTerm: string) => {
-  const response = await axios.get(`/api/products/search?query=${searchTerm}`);
-  return response.data;
-};
-export const useGetSearchedProducts = (searchTerm: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_SEARCHED_PRODUCTS, searchTerm],
-    queryFn: () => getSearchedProducts(searchTerm),
-    enabled: !!searchTerm,
-  });
-};
+  const getSearchedProducts = async ({ query, category }: SearchParams) => {
+    if (category === 'All') category = '';
+    const response = await axios.get(`/api/products/search?query=${query}&category=${category}`);
+    return response.data;
+  };
+  
+  export const useGetSearchedProducts = (searchParams: SearchParams) => {
+    return useQuery({
+      queryKey: [QUERY_KEYS.GET_SEARCHED_PRODUCTS, searchParams],
+      queryFn: () => getSearchedProducts(searchParams),
+      enabled: !!searchParams.query,
+    });
+  };

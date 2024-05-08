@@ -1,8 +1,13 @@
-
 export interface Category {
   id: string;
   name: string
 }
+
+export interface SearchParams {
+  query: string;
+  category: string;
+}
+
 export interface ProductProps {
     brand: string;
     category: Category;
@@ -16,6 +21,7 @@ export interface ProductProps {
     name: string;
     id: number;
   }
+
 export interface StoreProduct {
     brand: string;
     category: Category;
@@ -45,4 +51,5 @@ export interface IUser {
   email: string;
   profile_picture: string;
   address: string;
+  saved: StoreProduct[];
 }

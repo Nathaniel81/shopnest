@@ -1,25 +1,39 @@
-import { BiCaretDown } from "react-icons/bi";
-import { HiOutlineSearch } from "react-icons/hi";
-import { SlLocationPin } from "react-icons/sl";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { StateProps, StoreProduct } from "../../../types";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  MdArrowDropDown,
+  // MdExitToApp,
+  MdLocationOn,
+  MdSearch,
+  // MdShoppingCart
+} from "react-icons/md";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
+import useDebounce from "../../../hooks/useDebounce";
+import { useGetSearchedProducts, useGetCategories } from "../../../lib/react-query/queries";
+import { StateProps, StoreProduct, Category } from "../../../types";
 import SearchProducts from "../SearchProduct";
 import { headerIcons } from "../../../constants";
-import { useGetSearchedProducts } from "../../../lib/react-query/queries";
-import useDebounce from "../../../hooks/useDebounce";
-import { BeatLoader } from "react-spinners";
 
 
 const Header = () => {
   const cartIcon = headerIcons[0].imgURL;
-  const userInfo = false;
-  const navigate = useNavigate();
+  const logo = headerIcons[1].imgURL;
+  const [isHovered, setIsHovered] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const { data: categories } = useGetCategories();
 
-  const { productData, favoriteData } = useSelector(
+
+  const { 
+    productData: cartItems, 
+    // favoriteData, 
+    userInfo
+  } = useSelector(
     (state: StateProps) => state.app
   );
+
+  
+  const [showAll, setShowAll] = useState(false);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -27,44 +41,79 @@ const Header = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const debouncedSearch = useDebounce(searchQuery, 500);
-  const { 
+  const debouncedSearch = useDebounce({ query: searchQuery, category: selectedCategory }, 500);
+  const {
     data: searchedProducts, 
-    isFetching: isSearchFetching 
+    isFetching: isSearchFetching,
   } = useGetSearchedProducts(debouncedSearch);
+
+  useEffect(() => {
+    console.log(searchedProducts);
+  }, [searchedProducts]);
 
 
   return (
-    <div className="w-full h-20 bg-amazon_blue text-lightText sticky top-0 z-50">
-      <div className="h-full w-full mx-auto inline-flex items-center justify-between gap-1 mdl:gap-3 px-4">
-        {/* logo */}
-        <Link
-          to={"/"}
-          className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 flex items-center justify-center h-[70%]"
-        >
-        LOGO
-        </Link>
-        {/* delivery */}
-        <div className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%] hidden xl:inline-flex gap-1">
-          <SlLocationPin />
-          <div className="text-xs">
-            <p>Deliver to</p>
-            <p className="text-white font-bold uppercase">USA</p>
+    <div className="sticky top-0 z-50">
+      <div className="w-full bg-amazon_blue text-white px-4 py-3 flex md:justify-between items-center gap-2 md:gap-4 lgl:gap-2 xl:gap-4">
+        <Link to="/">
+          <div className="headerHover">
+            <img className="w-24 mt-2" src={logo} alt="logoImage" />
           </div>
+        </Link>
+        <div className="hidden md:inline-flex headerHover">
+          <MdLocationOn />
+          <p className="flex flex-col text-xs text-lightText font-light">
+            Deliver to{" "}
+            <span className="text-sm font-semibold -mt-1 text-whiteText">
+              Ethiopia
+            </span>
+          </p>
         </div>
-        {/* serchbar */}
-        <div className="flex-1 h-10 hidden md:inline-flex items-center justify-between relative">
+        <div className="hidden lgl:inline-flex h-10 rounded-md flex-grow relative">
+          <span
+            onClick={() => setShowAll(!showAll)}
+            className="px-2 h-full bg-gray-200 hover:bg-gray-300 border-2 cursor-pointer duration-300 text-sm text-amazon_blue font-titleFont flex items-center justify-center rounded-tl-md rounded-bl-md"
+            >
+            {selectedCategory}{" "}
+            <span>
+              <MdArrowDropDown />
+            </span>
+          </span>
+          {showAll && (
+            <div>
+              <ul
+                className="absolute w-56 h-80 top-10 left-0 overflow-y-scroll overflow-x-hidden bg-white border-[1px] border-amazon_blue text-black p-2 flex flex-col gap-1 z-50"
+              >
+                            <p
+              className="text-gray-800 hover:bg-gray-200 rounded-md px-2 py-1 cursor-pointer"
+              // onClick={() => ("")}
+            >
+              {selectedCategory ? "All" : ""}
+            </p>
+                {categories.map((item: Category) => (
+                  <li
+                    onClick={() => {
+                      setSelectedCategory(item.name);
+                      setShowAll(false);
+                    }}
+                    className="text-sm tracking-wide font-titleFont border-b-[1px] border-b-transparent hover:border-b-amazon_blue cursor-pointer duration-200"
+                    key={item.id}
+                  >
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <input
             onChange={handleSearch}
             value={searchQuery}
-            className="w-full h-full rounded-md px-2 placeholder:text-sm text-base text-black border-[3px] border-transparent outline-none focus-visible:border-amazon_yellow"
+            className="h-full text-base text-amazon_blue flex-grow outline-none border-none px-2"
             type="text"
-            placeholder="Search products"
           />
-          <span className="w-12 h-full bg-amazon_yellow text-black text-2xl flex items-center justify-center absolute right-0 rounded-tr-md rounded-br-md">
-            <HiOutlineSearch />
+          <span className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md">
+            <MdSearch />
           </span>
-          {/* ========== Searchfield ========== */}
           {searchQuery && (
             <div className="absolute left-0 top-12 w-full mx-auto max-h-96 bg-gray-200 rounded-lg overflow-y-scroll cursor-pointer text-black">
               {searchedProducts?.length > 0 ? (
@@ -82,64 +131,80 @@ const Header = () => {
                     ))}
                 </>
               ) : (
-                <div className="bg-gray-50 flex items-center justify-center py-10 rounded-lg shadow-lg">
-                  <p className="text-xl font-semibold">
-                    {isSearchFetching ? 
-                      <div className="w-full flex flex-col gap-6 items-center justify-center">
-                        <BeatLoader color="#131921" size={10} />
-                      </div> :
-                    <>Nothing is matches with your search keywords.</>}
-                  </p>
+            <div className="bg-gray-50 flex items-center justify-center py-10 rounded-lg shadow-lg">
+              {isSearchFetching ? (
+                <div className="w-full flex flex-col gap-6 items-center justify-center">
+                  <BeatLoader color="#131921" size={10} />
                 </div>
+              ) : (
+                <p className="text-xl font-semibold">
+                  {searchQuery && searchedProducts?.length < 1 && "Nothing matches with your search keywords."}
+                </p>
+              )}
+            </div>
               )}
             </div>
           )}
-          {/* ========== Searchfield ========== */}
         </div>
-        {/* signin */}
-        {userInfo ? (
-          <div className="flex items-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] gap-1">
-            <img
-              src={userInfo.image}
-              alt="userImage"
-              className="w-8 h-8 rounded-full object-cover"
-            />
+        {userInfo?.email ? (
+          <div className="flex items-center p-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] gap-1"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            >
             <div className="text-xs text-gray-100 flex flex-col justify-between">
-              <p className="text-white font-bold">{userInfo.name}</p>
+              <p className="text-white font-bold">{userInfo.username}</p>
               <p>{userInfo.email}</p>
             </div>
+              <MdArrowDropDown />
+              {isHovered && (
+                <div className="absolute top-16 bg-white p-4 rounded shadow-md text-sm text-amazon_blue font-titleFont">
+                  <ul>
+                    <li className="hover:text-yellow-500 cursor-pointer duration-200">Marked and Favorites</li>
+                    <li className="hover:text-yellow-500 cursor-pointer duration-200">Logout</li>
+                  </ul>  
+                </div>
+              )}
           </div>
         ) : (
-          <Link
-            to={'/sign-in'}
-            className="text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%]"
-          >
-            <p>Hello, sign in</p>
-            <p className="text-white font-bold flex items-center">
-              Account & Lists{" "}
+        <Link to="/sign-in">
+          <div className="flex flex-col items-start justify-center p-2 hover:border-white cursor-pointer duration-300 border border-transparent">
+            <p className="text-xs text-lightText font-light">
+              Hello, sign in
+            </p>
+            <p className="hidden md:inline-flex text-sm font-semibold -mt-1 text-whiteText">
+              Accounts & Lists{" "}
               <span>
-                <BiCaretDown />
               </span>
             </p>
-          </Link>
+          </div>
+        </Link>
         )}
-        {/* fovorite */}
-        <Link
-          to={"/favorite"}
-          className="text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] relative"
-        >
+
+        {userInfo?.email ? (
+          <Link
+            to={"/favorite"}
+            className="p-2 text-xs text-gray-100 flex flex-col justify-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] relative"
+          >
           <p>Marked</p>
           <p className="text-white font-bold">& Favorite</p>
-          {favoriteData.length > 0 && (
+          {/* {favoriteData.length > 0 && (
             <span className="absolute right-2 top-2 w-4 h-4 border-[1px] border-gray-400 flex items-center justify-center text-xs text-amazon_yellow">
               {favoriteData.length}
             </span>
-          )}
-        </Link>
-        {/* cart */}
+          )} */}
+          </Link>
+        ): (
+          <>
+          <div className="hidden mdl:flex flex-col items-start justify-center headerHover p-2 hover:border-white cursor-pointer duration-300 border border-transparent">
+            <p className="text-xs text-lightText font-light">Returns</p>
+            <p className="text-sm font-semibold -mt-1 text-whiteText">& Orders</p>
+          </div>
+          </>
+        )}
+
         <Link
           to={"/cart"}
-          className="flex items-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] relative"
+          className="flex items-center p-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] relative"
         >
           <img
             className="w-auto object-cover h-8"
@@ -147,8 +212,8 @@ const Header = () => {
             alt="cartImg"
           />
           <p className="text-xs text-white font-bold mt-3">Cart</p>
-          <span className="absolute text-amazon_yellow text-sm top-2 left-[29px] font-semibold">
-            {productData ? productData.length : 0}
+          <span className="absolute text-amazon_yellow text-sm top-2 left-[30px] font-semibold">
+          {cartItems.length > 0 ? cartItems.length : 0}
           </span>
         </Link>
       </div>

@@ -14,6 +14,7 @@ interface ProductsProps {
 
 const Products = ({ productData }: ProductsProps) => {
   const dispatch = useDispatch();
+
   const { favoriteData } = useSelector(
     (state: StateProps) => state.app
   );

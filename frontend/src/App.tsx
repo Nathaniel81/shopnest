@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
-import { Home, ProductDetail, Cart, Signin } from './_root/pages';
+import { Home, ProductDetail, Cart,Favorite, Signin, Signup } from './_root/pages';
 import RootLayout from "./_root/pages/RootLayout";
 import './globals.css';
 
@@ -17,10 +17,11 @@ function App() {
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
-            <Route path="/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/favorite" element={<Favorite />} />
             <Route path="/sign-in" element={<Signin />} />
-            {/* <Route path="/sign-up" element={<SignupForm />} /> */}
+            <Route path="/sign-up" element={<Signup />} />
+            <Route path="/:id" element={<ProductDetail />} />
           </Route>
         </Routes>
       </Router>
@@ -29,4 +30,3 @@ function App() {
 }
 
 export default App;
-
