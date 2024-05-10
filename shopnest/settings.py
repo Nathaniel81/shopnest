@@ -37,6 +37,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 
@@ -193,6 +197,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+STRIPE_SECRET_KEY=os.getenv('STRIPE_SECRET_KEY')
+SITE_URL = 'http://localhost:5173/#/cart'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

@@ -1,19 +1,28 @@
 import { SiMediamarkt } from "react-icons/si";
 import FormattedPrice from "../../FormattedPrice";
 import { 
-	// useDispatch, 
+	useDispatch, 
 	useSelector 
 } from "react-redux";
 import { StateProps, StoreProduct } from "../../../types";
 import { useEffect, useState } from "react";
-// import { loadStripe } from "@stripe/stripe-js";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
+import { toast } from "react-toastify";
+import QueryString from 'query-string';
+import { resetUser, resetCart } from "../../../redux/slices/appSlice";
 
 
 const CartPayment = () => {
   const { productData, userInfo } = useSelector(
     (state: StateProps) => state.app
   );
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   const [totalAmount, setTotalAmount] = useState(0);
+
   useEffect(() => {
     let amt = 0;
     productData.map((item: StoreProduct) => {
@@ -23,7 +32,62 @@ const CartPayment = () => {
     setTotalAmount(amt);
   }, [productData]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const values = QueryString.parse(location.search);
 
+            if (values.success) {
+              const response = await axios.post(
+                `/api/stripe/confirm_payment/`,
+                {
+                    session_id: values.session_id,
+                    items: productData
+                }
+              );
+              if (response.data.status === 'Payment was successful and order was created') {
+                toast.success("Order placed! You will receive an email confirmation.");
+                dispatch(resetCart());
+                navigate('/');
+              } else {
+                  toast.error("Error confirming payment");
+              }
+            }
+
+            if (values.canceled) {
+                toast.info("Order canceled -- continue to shop around and checkout when you're ready");
+                navigate('/');
+            }
+          //eslint-disable-next-line
+        } catch (error: any) {
+            console.error(error.response.data);
+            toast.error("Error confirming payment");
+        }
+    };
+
+    const values = QueryString.parse(location.search);
+    if (values.success || values.canceled) {
+        fetchData();
+    }
+    //eslint-disable-next-line
+  }, [location.search]);
+
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post<{ url: string }>(`/api/stripe/`, {items: productData})
+  
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      toast.error('Login Required');
+      dispatch(resetUser());
+    }
+  };
+
+  
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
@@ -42,14 +106,16 @@ const CartPayment = () => {
         </span>
       </p>
       {userInfo ? (
-        <div className="flex flex-col items-center">
-          <button
-            // onClick={handleCheckout}
-            className="w-full h-10 text-sm font-semibold bg-amazon_blue text-white rounded-lg hover:bg-amazon_yellow hover:text-black duration-300"
-          >
-            Proceed to Buy
+        <form
+          className="flex flex-col items-center"
+          onSubmit={handleSubmit}
+        >
+          <button 
+            className="w-full h-10 text-sm font-semibold bg-amazon_blue text-white rounded-lg hover:bg-amazon_yellow hover:text-black duration-300" 
+            type='submit'>
+              Checkout
           </button>
-        </div>
+        </form>
       ) : (
         <div className="flex flex-col items-center">
           <button className="w-full h-10 text-sm font-semibold bg-amazon_blue bg-opacity-50 text-white rounded-lg cursor-not-allowed">

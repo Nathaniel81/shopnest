@@ -17,7 +17,7 @@ class StripeCheckoutView(APIView):
 
     def post(self, request):
         if request.user.is_anonymous:
-            raise PermissionDenied("You must be logged in to unsave a product")
+            raise PermissionDenied("You must be logged in")
         line_items = []
         for item in request.data.get('items', []):
             try:
@@ -80,7 +80,7 @@ class ConfirmPaymentView(APIView):
                 paidAt=timezone.now()
             )
 
-            # Create OrderItems for each item in the cart and decrease product countInStock
+            # Create OrderItems for each item in the cart and decrease products countInStock
             for item in cart_items:
                 product = Product.objects.get(id=item['id'])
                 OrderItem.objects.create(
