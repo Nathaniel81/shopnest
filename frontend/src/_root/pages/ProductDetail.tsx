@@ -1,6 +1,6 @@
 import FormattedPrice from "../../components/FormattedPrice";
 import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
-import {   useEffect } from "react";
+import { useEffect } from "react";
 import { FaHeart } from "react-icons/fa";
 import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch } from "react-redux";
@@ -17,12 +17,12 @@ const ProductDetail = () => {
     data: product, 
     isLoading,
   } = useGetProductDetail(id);
-  console.log(product)
 
   const addToCartHandler = () => {
     dispatch(
       addToCart({
         id: product.id,
+        name: product.name,
         brand: product.brand,
         category: product.category.name,
         description: product.description,
@@ -30,7 +30,6 @@ const ProductDetail = () => {
         is_new: product.is_new,
         old_price: product.old_price,
         price: product.price,
-        title: product.title,
         quantity: 1,
       })
     )
