@@ -26,6 +26,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html')),
     path('api/products/', include('core.urls')),
     path('api/user/', include('accounts.urls')),
+    path('api/stripe/', include('payment.urls')),
 ]
 
 
