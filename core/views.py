@@ -1,10 +1,14 @@
-from .models import Product, Category
-from .serializers import ProductSerializer, CategorySerializer
-from rest_framework import generics, status
 from django.db.models import Q
-from core.authenticate import CustomAuthentication
 from django.shortcuts import get_object_or_404
+from rest_framework import generics, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+
+from core.authenticate import CustomAuthentication
+
+from .models import Category, Product
+from .serializers import CategorySerializer, ProductSerializer
+
 
 class ProductsAPIView(generics.ListAPIView):
     """
@@ -17,10 +21,14 @@ class ProductsAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         category = self.request.query_params.get('category', '')
+
         if category:
-            queryset = Product.objects.filter(Q(category__name__iexact=category))
+            queryset = Product.objects.filter(
+                Q(category__name__iexact=category) & 
+                Q(countInStock__gt=0))
         else:
-            queryset = Product.objects.all()
+            queryset = Product.objects.filter(countInStock__gt=0)
+
         return queryset
 
 class CategoriesAPIView(generics.ListAPIView):
@@ -60,7 +68,7 @@ class SearchProductsAPIView(generics.ListAPIView):
         """
 
         query = self.request.query_params.get('query', '')
-        queryset = Product.objects.filter(Q(name__icontains=query))
+        queryset = Product.objects.filter(Q(name__icontains=query) & Q(countInStock__gt=0))
         category = self.request.query_params.get('category', '')
         if category:
             queryset = queryset.filter(category__name__iexact=category)
