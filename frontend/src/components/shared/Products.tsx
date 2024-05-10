@@ -25,7 +25,6 @@ const Products = ({ productData }: ProductsProps) => {
       {productData?.map(
         ({
           id,
-          title,
           name,
           brand,
           category,
@@ -65,7 +64,7 @@ const Products = ({ productData }: ProductsProps) => {
                       is_new: is_new,
                       old_price: old_price,
                       price: price,
-                      title: title,
+                      name: name,
                       quantity: 1,
                     })
                   )
@@ -86,7 +85,7 @@ const Products = ({ productData }: ProductsProps) => {
                           is_new: is_new,
                           old_price: old_price,
                           price: price,
-                          title: title,
+                          name: name,
                         })
                       )
                     }
@@ -123,6 +122,7 @@ const Products = ({ productData }: ProductsProps) => {
                   dispatch(
                     addToCart({
                       id: id,
+                      name: name,
                       brand: brand,
                       category: category,
                       description: description,
@@ -130,7 +130,6 @@ const Products = ({ productData }: ProductsProps) => {
                       is_new: is_new,
                       old_price: old_price,
                       price: price,
-                      title: title,
                       quantity: 1,
                     })
                   )
