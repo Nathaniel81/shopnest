@@ -40,7 +40,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
         Returns:
             Response: The HTTP response.
-
         """
 
         # Call the super method to perform default token generation
@@ -100,7 +99,8 @@ class RegistrationView(generics.CreateAPIView):
             'id': serializedData['id'],
             'username': serializedData['username'],
             'email': serializedData['email'],
-        })
+        }, status=status.HTTP_201_CREATED)
+
         access_token =  serializedData.get('access_token')
         refresh_token =  serializedData.get('refresh_token')
 
@@ -166,55 +166,3 @@ class LogoutView(APIView):
             return response
         except Exception as e:
             raise exceptions.ParseError("Invalid token")
-
-class RefreshTokenView(APIView):
-    """
-    Custom view for refreshing access tokens.
-    """
-
-    def post(self, request):
-        """
-        Handle POST request for refreshing access tokens.
-
-        This method retrieves the refresh token from cookies, generates new access and
-        refresh tokens, sets cookies with the new tokens, and returns a response.
-
-        Args:
-            request (HttpRequest): The request object.
-
-        Returns:
-            Response: The HTTP response.
-        """
-        # Retrieve refresh token from cookies
-        refresh_token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'])
-        # Check if refresh token is missing
-        if not refresh_token:
-            return Response({'error': 'Refresh token is missing'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        try:
-            # Instantiate a RefreshToken object
-            token = RefreshToken(refresh_token)
-            new_access_token = str(token.access_token)
-            new_refresh_token = str(token)
-
-            response = Response()
-            # Set httponly flag for access and refresh tokens in cookies
-            response.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=new_access_token,
-                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
-            )
-            response.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'],
-                value=new_refresh_token,
-                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
-            )
-            return response
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

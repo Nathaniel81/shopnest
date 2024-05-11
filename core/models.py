@@ -24,7 +24,6 @@ class Product(models.Model):
     countInStock = models.IntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
-    saved_by = models.ManyToManyField(User, related_name='saved_products', blank=True)
 
     @property
     def is_new(self):
@@ -37,10 +36,11 @@ class Product(models.Model):
         return self.createdAt >= threshold
 
     @property
-    def old_price(self, percent_increase=10):
+    def old_price(self):
         """
         Method to calculate the old price based on the current price and a percentage increase.
         """
+        percent_increase = 10
         # Convert percent_increase to Decimal before performing the calculation
         percent_increase_decimal = Decimal(percent_increase)
         # Calculate old price using Decimal objects
@@ -48,6 +48,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)
@@ -69,7 +70,6 @@ class OrderItem(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     qty = models.IntegerField(null=True, blank=True, default=0)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    image = CloudinaryField('image', null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
