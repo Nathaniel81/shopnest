@@ -1,7 +1,7 @@
+import { BeatLoader } from "react-spinners";
 import Banner from "../../components/shared/Banner";
 import Products from "../../components/shared/Products";
 import { useGetProducts } from "../../lib/react-query/queries";
-import { BeatLoader } from "react-spinners";
 
 
 const Home = () => {

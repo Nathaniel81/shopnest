@@ -1,13 +1,13 @@
-import FormattedPrice from "../../FormattedPrice";
-import { LuMinus, LuPlus } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
+import { LuMinus, LuPlus } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { StoreProduct as Item } from "../../../types";
+import FormattedPrice from "../../FormattedPrice";
 
-import { 
-	decreaseQuantity, 
-	deleteProduct, 
-	increaseQuantity 
+import {
+  decreaseQuantity,
+  deleteProduct,
+  increaseQuantity
 } from "../../../redux/slices/appSlice";
 
 interface cartProductsProps {

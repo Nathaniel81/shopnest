@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-import { LuMenu } from "react-icons/lu";
-import { StateProps } from "../../../types";
-import { resetUser, resetCart } from "../../../redux/slices/appSlice";
-import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { LuMenu } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetCategories, useGetProducts } from "../../../lib/react-query/queries";
-import { Category } from "../../../types";
+import { resetCart, resetUser } from "../../../redux/slices/appSlice";
+import { Category, StateProps } from "../../../types";
 
 
 const BottomHeader = () => {
@@ -15,7 +14,6 @@ const BottomHeader = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const { data: categories } = useGetCategories();
   const { refetch: refetchProducts } = useGetProducts(selectedCategory ? `?category=${selectedCategory}` : '');
-
 
   const handleSignOut = async () => {
     try {

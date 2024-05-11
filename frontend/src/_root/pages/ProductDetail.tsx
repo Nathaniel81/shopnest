@@ -1,12 +1,12 @@
-import FormattedPrice from "../../components/FormattedPrice";
-import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
 import { useEffect } from "react";
 import { FaHeart } from "react-icons/fa";
 import { HiShoppingCart } from "react-icons/hi";
 import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+import FormattedPrice from "../../components/FormattedPrice";
 import { useGetProductDetail } from "../../lib/react-query/queries";
-import { useParams, useNavigate } from "react-router-dom";
+import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
 
 
 const ProductDetail = () => {
@@ -114,7 +114,7 @@ const ProductDetail = () => {
                 onClick={() => addToCartHandler()}
                 className="w-full md:w-96 h-12 bg-amazon_blue text-gray-200 hover:bg-amazon_yellow hover:text-amazon_blue duration-300 rounded-lg mt-5 text-base font-semibold"
               >
-                add to cart
+                Add to Cart
               </button>
             </div>
           </div>

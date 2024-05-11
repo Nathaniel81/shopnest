@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-// import { darkLogo } from "../assets/index";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignupValidation } from "../../lib/validation";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import axios from "axios";
-import { addUser } from "../../redux/slices/appSlice";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import * as z from "zod";
+import { SignupValidation } from "../../lib/validation";
+import { addUser } from "../../redux/slices/appSlice";
 
 
 const Signup = () => {

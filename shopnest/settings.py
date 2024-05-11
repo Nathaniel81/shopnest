@@ -36,7 +36,7 @@ SECRET_KEY = 'django-insecure-9!xlw=l9cze5xot!(j2bf=06$-a1694mshoskdqv7#0li^v@st
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://shopnest-eykw.onrender.com']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
@@ -199,7 +199,7 @@ USE_I18N = True
 USE_TZ = True
 
 STRIPE_SECRET_KEY=os.getenv('STRIPE_SECRET_KEY')
-SITE_URL = 'http://localhost:5173/#/cart'
+SITE_URL = 'https://shopnest-eykw.onrender.com/#/cart'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

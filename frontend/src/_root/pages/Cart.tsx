@@ -1,10 +1,10 @@
-import { StateProps, StoreProduct } from "../../types";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { StateProps, StoreProduct } from "../../types";
 
+import CartPayment from "../../components/shared/cart/CartPayment";
 import CartProduct from "../../components/shared/cart/CartProduct";
 import ResetCart from "../../components/shared/cart/ResetCart";
-import CartPayment from "../../components/shared/cart/CartPayment";
 
 
 const CartPage = () => {

@@ -1,12 +1,11 @@
-import { ProductProps } from "../../types";
-import { HiShoppingCart } from "react-icons/hi";
-import FormattedPrice from "../FormattedPrice";
-import { useSelector, useDispatch } from "react-redux";
-import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
-import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { StateProps, StoreProduct } from "../../types";
+import { HiShoppingCart } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { addToCart, addToFavorite } from "../../redux/slices/appSlice";
+import { ProductProps, StateProps, StoreProduct } from "../../types";
+import FormattedPrice from "../FormattedPrice";
 
 interface ProductsProps {
   productData: StoreProduct[];
@@ -137,7 +136,7 @@ const Products = ({ productData }: ProductsProps) => {
                 }}
                 className="h-10 font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300 mt-2"
               >
-                add to cart
+                Add to Cart
               </button>
             </div>
           </div>

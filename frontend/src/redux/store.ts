@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import appReducer from "./slices/appSlice"
+import appReducer from "./slices/appSlice";
 
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 

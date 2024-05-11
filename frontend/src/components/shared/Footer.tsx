@@ -1,7 +1,9 @@
-// import logo from "../images/logo.png";
+import { headerIcons } from "../../constants";
+
 
 const Footer = () => {
-  const logo = ''
+  const logo = headerIcons[1].imgURL;
+
   return (
     <div className="w-full h-20 bg-amazon_light text-gray-300 flex items-center justify-center gap-4">
       <img className="w-24" src={logo} alt="logo" />
@@ -9,7 +11,7 @@ const Footer = () => {
         All rights reserved{" "}
         <a
           className="hover:text-white hover:underline decoration-[1px] cursor-pointer duration-300"
-          href="https://reactbd.com"
+          href="https://shopnest-eykw.onrender.com"
           target="_blank"
         >
           @shopnest.com

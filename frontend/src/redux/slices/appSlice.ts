@@ -1,5 +1,5 @@
-import { StoreProduct, IUser  } from "../../types";
-import { createSlice  } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import { IUser, StoreProduct } from "../../types";
 
 interface AppState {
   productData: StoreProduct[];

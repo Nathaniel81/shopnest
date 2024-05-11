@@ -1,5 +1,6 @@
-import { resetFavoriteData } from "../../../redux/slices/appSlice";
 import { useDispatch } from "react-redux";
+import { resetFavoriteData } from "../../../redux/slices/appSlice";
+
 
 const ResetFavoriteItems = () => {
   const dispatch = useDispatch();

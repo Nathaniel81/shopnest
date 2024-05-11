@@ -1,7 +1,7 @@
-import FormattedPrice from "../../FormattedPrice";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/slices/appSlice";
 import { StoreProduct } from "../../../types";
+import FormattedPrice from "../../FormattedPrice";
 
 
 interface cartProductProps {
