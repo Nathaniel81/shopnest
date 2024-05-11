@@ -64,7 +64,8 @@ class SearchProductsAPIView(generics.ListAPIView):
         """
         Get the queryset of products filtered by a search query and category.
 
-        This method filters the queryset to include only products containing the search query in their name and belonging to the specified category.
+        This method filters the queryset to include only products containing the search query
+        in their name and belonging to the specified category.
         """
 
         query = self.request.query_params.get('query', '')
@@ -73,49 +74,3 @@ class SearchProductsAPIView(generics.ListAPIView):
         if category:
             queryset = queryset.filter(category__name__iexact=category)
         return queryset
-
-class SaveProductView(generics.GenericAPIView):
-    """
-    View for saving a product.
-
-    This view allows authenticated users to save a product.
-    """
-
-    authentication_classes = [CustomAuthentication]
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handle POST request for saving a product.
-
-        This method adds the authenticated user to the 'saved_by' field of the product.
-        """
-
-        if request.user.is_anonymous:
-            raise PermissionDenied("You must be logged in to save a product")
-
-        product = get_object_or_404(Product, id=self.kwargs.get('pk'))
-        product.saved_by.add(request.user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-class UnsaveProductView(generics.GenericAPIView):
-    """
-    View for unsaving a product.
-
-    This view allows authenticated users to unsave a product.
-    """
-
-    authentication_classes = [CustomAuthentication]
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handle POST request for unsaving a product.
-
-        This method removes the authenticated user from the 'saved_by' field of the product.
-        """
-
-        if request.user.is_anonymous:
-            raise PermissionDenied("You must be logged in to unsave a product")
-
-        product = get_object_or_404(Product, id=self.kwargs.get('pk'))
-        product.saved_by.remove(request.user)
-        return Response(status=status.HTTP_204_NO_CONTENT)
