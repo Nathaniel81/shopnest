@@ -14,7 +14,7 @@ const Footer = () => {
           href="https://shopnest-eykw.onrender.com"
           target="_blank"
         >
-          @shopnest.com
+          @shopnest-eykw.onrender.com
         </a>
       </p>
     </div>
