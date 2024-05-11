@@ -28,7 +28,7 @@ jobs:
         pip install -r requirements_workflow.txt
     - name: Run Tests and Coverage
       run: |
-          coverage run manage.py test
+          coverage run manage.py test --keepdb
     - name: Generate Coverage Report
       run: |
           coverage report -m
