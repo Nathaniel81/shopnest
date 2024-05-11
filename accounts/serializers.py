@@ -13,10 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
     This serializer is used to serialize User objects.
     """
 
-    saved_products = ProductSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'address', 'saved_products']
+        fields = ['id', 'username', 'email']
 
     def get__id(self, obj):
         """Get the id field value."""
@@ -61,7 +60,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'address', 'password', 'confirmPassword']
+        fields = ['id', 'username', 'email', 'password', 'confirmPassword']
         read_only_fields = ['id']
 
     def validate(self, data):
@@ -82,6 +81,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         if data['password'] != data['confirmPassword']:
             raise serializers.ValidationError("Passwords do not match.")
+        if User.objects.filter(username=data['username']).exists():
+            raise serializers.ValidationError("A user with this username already exists.")
+        if User.objects.filter(email=data['email']).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
         return data
 
     def save(self, validated_data):
