@@ -1,14 +1,18 @@
-from core.authenticate import CustomAuthentication
+import pycountry
+import requests
 from django.conf import settings
 from django.db.models import Count
+from django.http import JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt import tokens
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.throttling import AnonRateThrottle
+
+from core.authenticate import CustomAuthentication
 
 from .models import User
 from .serializers import (MyTokenObtainPairSerializer, RegistrationSerializer,
@@ -166,3 +170,37 @@ class LogoutView(APIView):
             return response
         except Exception as e:
             raise exceptions.ParseError("Invalid token")
+
+
+def get_location(request):
+    """
+    Fetch the client's public IP address and use it to retrieve geolocation data.
+    The function uses an external service to get the public IP address and another
+    service to get the geolocation information based on that IP. It then converts
+    the country code to the full country name using the pycountry library and 
+    returns the location data as a JSON response.
+
+    Returns:
+        JsonResponse: A JSON response containing the geolocation data, including 
+                      the full country name if available.
+    """
+    try:
+        # Get the public IP address of the client
+        ip_response = requests.get('https://api64.ipify.org?format=json')
+        ip_data = ip_response.json()
+        ip_address = ip_data['ip']
+        
+        # Fetch the geolocation data based on the IP address
+        location_response = requests.get(f'http://ipinfo.io/{ip_address}/json')
+        location_data = location_response.json()
+        
+        # Get the full country name using pycountry
+        country_code = location_data.get('country')
+        if country_code:
+            country = pycountry.countries.get(alpha_2=country_code)
+            if country:
+                location_data['country_name'] = country.name
+
+        return JsonResponse(location_data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
