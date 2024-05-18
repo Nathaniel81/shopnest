@@ -5,5 +5,4 @@ urlpatterns = [
     path('login/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('register/', views.RegistrationView.as_view(), name='registration'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('get-location/', views.get_location, name='get_location'),
 ]

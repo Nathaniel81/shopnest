@@ -1,10 +1,9 @@
 import { useClickOutside } from '@mantine/hooks';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaSignOutAlt } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import {
   MdArrowDropDown,
-  MdLocationOn,
   MdSearch,
 } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -23,24 +22,6 @@ const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const { data: categories } = useGetCategories();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const [location, setLocation] = useState('');
-
-  useEffect(() => {
-    const fetchLocation = async () => {
-      try {
-        const response = await fetch('/api/user/get-location/');
-        const data = await response.json();
-        if (data.country) {
-          setLocation(data.country_name);
-        }
-      } catch (error) {
-        console.error('Error fetching location:', error);
-      }
-    };
-
-    fetchLocation();
-  }, []);
 
   const ref = useClickOutside(() => {
    setSidebarOpen(false);
@@ -163,15 +144,6 @@ const toggleSidebar = () => {
             <img className="w-24 mt-2" src={logo} alt="logoImage" />
           </div>
         </Link>
-        <div className="hidden lg:inline-flex headerHover">
-          <MdLocationOn />
-          <p className="flex flex-col text-xs text-lightText font-light">
-            Deliver to{" "}
-            <span className="text-sm font-semibold -mt-1 text-whiteText">
-              {location}
-            </span>
-          </p>
-        </div>
         <div className="flex h-10 rounded-md flex-grow relative">
           <span
             onClick={() => setShowAll(!showAll)}
