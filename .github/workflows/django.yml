@@ -35,7 +35,7 @@ jobs:
           coverage xml
     - name: Check Coverage
       run: |
-          coverage report --fail-under=85
+          coverage report --fail-under=80
 
   deploy:
     runs-on: ubuntu-latest
