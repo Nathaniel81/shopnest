@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a simplified Amazon clone built as a personal project. It's designed to mimic the user interface of Amazon, providing a familiar and intuitive user experience.
+ShopNest is a simplified ecommerce platform that mimics Amazon's user interface for a familiar shopping experience. Developed with React (TypeScript), TailwindCSS, Django, and PostgreSQL, it includes user authentication, React Query for data fetching, Stripe for secure checkout, Redux Toolkit for state management, and a favorites system for user convenience.
 
 ## Technologies Used
 
